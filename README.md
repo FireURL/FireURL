@@ -9,7 +9,7 @@ Open url from a POST request. Simple Python script that fires a URL from a POST 
 Start fireURL with one of the followings:
 
 ```bash
-python firURL # Will start fireURL on default port 8000
+python firURL.py # Will start fireURL on default port 8000
 ```
 
 or
