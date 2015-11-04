@@ -19,7 +19,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from socket import gethostname, gethostbyname
 from subprocess import call
 from urlparse import urljoin
-import cgi, platform
+import cgi, platform, sys
 
 LISTENPORT=8000
 
@@ -71,6 +71,8 @@ def print_info():
 
 if __name__ == '__main__':
     ip = gethostbyname(gethostname())
+
+    LISTENPORT = int(sys.argv[1]) or LISTENPORT
 
     print_info()
 
