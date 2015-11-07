@@ -18,7 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from socket import gethostname, gethostbyname
 from subprocess import call
-from urlparse import urljoin
+import urlparse
+from urlparse import urljoin, parse_qs
 import cgi, platform, sys
 
 LISTENPORT=8000
@@ -37,6 +38,23 @@ class GetHandler(BaseHTTPRequestHandler):
             commands += ['xdg-open']
         return call(commands + [url]) == 0
 
+    def post_get_handler(self, url):
+        response_code = 500
+
+        if not url:
+            response_code = 400
+        else:
+            response_code = 200 if self.fireURL(url) else 500
+
+        self.send_response(response_code)
+        self.end_headers()
+
+
+    def do_GET(self):
+        o = urlparse.urlparse(self.path)
+        quries = urlparse.parse_qs(o.query)
+        url = quries['url'] or ""
+        self.post_get_handler(url)
 
     def do_POST(self):
         print 'Processing request: %s' % self.path
@@ -49,23 +67,14 @@ class GetHandler(BaseHTTPRequestHandler):
             postvars = cgi.parse_qs(self.rfile.read(length), keep_blank_values=1)
         else:
             postvars = {}
-
-        response_code = 500
-
-        if "url" not in postvars:
-            response_code = 400
-        else:
-            response_code = 200 if self.fireURL(postvars['url']) else 500
-
-        self.send_response(response_code)
-        self.end_headers()
+        self.post_get_handler(postvars['url'])
 
 def log_info(msg):
     print '\033[94m\033[1m' + "INFO: " + '\033[0m\033[94m' + msg + '\033[0m'
 
 def print_info():
     print '\033[1m' + '   )\n  ) \\\n / ) (\n \(_)/' + '\033[0m'
-    print '\033[95m\033[1m' + 'FireURL v.0.2 (c) PrankyMat 2015' + '\033[0m'
+    print '\033[95m\033[1m' + 'FireURL v.0.3 (c) PrankyMat 2015' + '\033[0m'
     log_info('FireURL is listening on '+str(ip)+':'+str(LISTENPORT)+'. POST a url to fire it!')
 
 
