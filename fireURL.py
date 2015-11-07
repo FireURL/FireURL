@@ -19,14 +19,14 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from socket import gethostname, gethostbyname
 from subprocess import call
 import urlparse
-from urlparse import urljoin, parse_qs
-import cgi, platform, sys
+from urlparse import urljoin
+import cgi, platform, sys, re
 
 LISTENPORT=8000
 
 class GetHandler(BaseHTTPRequestHandler):
     def fireURL(self, url):
-        url = urljoin('http://', url[0])
+        url = urljoin('http://', url)
 
         system = platform.system()
         commands = []
@@ -52,8 +52,9 @@ class GetHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         o = urlparse.urlparse(self.path)
-        quries = urlparse.parse_qs(o.query)
-        url = quries['url'] or ""
+        url = re.match('\Aurl=(.*)', o.query)
+        url = url.group(1) if url else ""
+
         self.post_get_handler(url)
 
     def do_POST(self):
@@ -67,14 +68,15 @@ class GetHandler(BaseHTTPRequestHandler):
             postvars = cgi.parse_qs(self.rfile.read(length), keep_blank_values=1)
         else:
             postvars = {}
-        self.post_get_handler(postvars['url'])
+        print postvars['url']
+        self.post_get_handler(postvars['url'][0])
 
 def log_info(msg):
     print '\033[94m\033[1m' + "INFO: " + '\033[0m\033[94m' + msg + '\033[0m'
 
 def print_info():
     print '\033[1m' + '   )\n  ) \\\n / ) (\n \(_)/' + '\033[0m'
-    print '\033[95m\033[1m' + 'FireURL v.0.3 (c) PrankyMat 2015' + '\033[0m'
+    print '\033[95m\033[1m' + 'FireURL v.0.3.1 (c) PrankyMat 2015' + '\033[0m'
     log_info('FireURL is listening on '+str(ip)+':'+str(LISTENPORT)+'. POST a url to fire it!')
 
 

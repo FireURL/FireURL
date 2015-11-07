@@ -1,4 +1,4 @@
-# FireURL (v.0.3)
+# FireURL (v.0.3.1)
 Open url from a POST request. Simple Python script that fires a URL from a POST request to the server computer.
 
 ## Requirements
