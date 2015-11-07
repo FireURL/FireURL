@@ -65,14 +65,14 @@ def log_info(msg):
 
 def print_info():
     print '\033[1m' + '   )\n  ) \\\n / ) (\n \(_)/' + '\033[0m'
-    print '\033[95m\033[1m' + 'FireURL v.0.1 (c) PrankyMat 2015' + '\033[0m'
+    print '\033[95m\033[1m' + 'FireURL v.0.2 (c) PrankyMat 2015' + '\033[0m'
     log_info('FireURL is listening on '+str(ip)+':'+str(LISTENPORT)+'. POST a url to fire it!')
 
 
 if __name__ == '__main__':
     ip = gethostbyname(gethostname())
 
-    LISTENPORT = int(sys.argv[1]) or LISTENPORT
+    LISTENPORT = int(sys.argv[1]) if len(sys.argv) >= 2 else LISTENPORT
 
     print_info()
 
