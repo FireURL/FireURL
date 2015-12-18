@@ -1,6 +1,8 @@
 # FireURL (v.0.3.1)
 Open url from a POST request. Simple Python script that fires a URL from a POST request to the server computer.
 
+<img src="https://github.com/FireURL/FireURL-Tutorial/blob/master/Assets/fireurl_server.png" height=500 />
+
 ## Requirements
 - Python 2.x
 - Computer running Linux, Windows, Mac with any browsers
